@@ -70,7 +70,7 @@ const TestManagement: React.FC = () => {
   
   const resetAndCloseDialog = () => {
     setEditingTest(null);
-    form.reset({ name: "", maxGrade: 100 });
+    form.reset({ name: "", maxGrade: 1 });  // Changed reset value from 100 to 1
     setDialogOpen(false);
   };
   
