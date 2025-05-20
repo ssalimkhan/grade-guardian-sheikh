@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { FileText, FilePdf } from "lucide-react";
+import { FileText, FileDown } from "lucide-react";
 import { useStore } from "@/store/store";
 import { exportToCSV, exportToPDF } from "@/utils/exportUtils";
 
@@ -25,7 +25,7 @@ const ExportButtons: React.FC = () => {
         onClick={handleExportPDF}
         className="order-last"
       >
-        <FilePdf className="ml-2 h-4 w-4" />
+        <FileDown className="ml-2 h-4 w-4" />
         تصدير PDF
       </Button>
       
