@@ -9,7 +9,84 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      grades: {
+        Row: {
+          created_at: string
+          id: string
+          studentid: string
+          testid: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          studentid: string
+          testid: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          studentid?: string
+          testid?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grades_studentid_fkey"
+            columns: ["studentid"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grades_testid_fkey"
+            columns: ["testid"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      tests: {
+        Row: {
+          created_at: string
+          id: string
+          maxgrade: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          maxgrade: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          maxgrade?: number
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -73,7 +73,13 @@ export const useStore = create<StoreState>((set, get) => ({
 
       if (error) throw error;
       
-      set({ tests: data || [] });
+      // Map database fields to our model
+      const mappedData = data?.map(item => ({
+        ...item,
+        maxGrade: item.maxgrade // Map maxgrade -> maxGrade
+      })) || [];
+      
+      set({ tests: mappedData });
     } catch (error) {
       console.error('Error fetching tests:', error);
       set({ error: 'حدث خطأ أثناء تحميل بيانات الاختبارات' });
@@ -92,7 +98,14 @@ export const useStore = create<StoreState>((set, get) => ({
 
       if (error) throw error;
       
-      set({ grades: data || [] });
+      // Map database fields to our model
+      const mappedData = data?.map(item => ({
+        ...item,
+        studentId: item.studentid, // Map studentid -> studentId
+        testId: item.testid       // Map testid -> testId
+      })) || [];
+      
+      set({ grades: mappedData });
     } catch (error) {
       console.error('Error fetching grades:', error);
       set({ error: 'حدث خطأ أثناء تحميل بيانات الدرجات' });
@@ -181,7 +194,7 @@ export const useStore = create<StoreState>((set, get) => ({
       const { error: gradesError } = await supabase
         .from('grades')
         .delete()
-        .eq('studentId', id);
+        .eq('studentid', id);
 
       if (gradesError) throw gradesError;
       
@@ -214,18 +227,24 @@ export const useStore = create<StoreState>((set, get) => ({
       set({ isLoading: true });
       const { data, error } = await supabase
         .from('tests')
-        .insert({ name, maxGrade })
+        .insert({ name, maxgrade: maxGrade }) // Use maxgrade (lowercase) to match DB column name
         .select()
         .single();
 
       if (error) throw error;
       
+      // Convert database fields to our model format
+      const newTest = {
+        ...data,
+        maxGrade: data.maxgrade // Map maxgrade -> maxGrade
+      };
+      
       set((state) => ({
-        tests: [...state.tests, data]
+        tests: [...state.tests, newTest]
       }));
       
       toast.success('تم إضافة الاختبار بنجاح');
-      return data;
+      return newTest;
     } catch (error) {
       console.error('Error adding test:', error);
       set({ error: 'حدث خطأ أثناء إضافة الاختبار' });
@@ -241,7 +260,7 @@ export const useStore = create<StoreState>((set, get) => ({
       set({ isLoading: true });
       const { error } = await supabase
         .from('tests')
-        .update({ name, maxGrade })
+        .update({ name, maxgrade: maxGrade }) // Use maxgrade (lowercase) to match DB column name
         .eq('id', id);
 
       if (error) throw error;
@@ -270,7 +289,7 @@ export const useStore = create<StoreState>((set, get) => ({
       const { error: gradesError } = await supabase
         .from('grades')
         .delete()
-        .eq('testId', id);
+        .eq('testid', id);
 
       if (gradesError) throw gradesError;
       
@@ -325,14 +344,25 @@ export const useStore = create<StoreState>((set, get) => ({
         // Create new grade
         const { data, error } = await supabase
           .from('grades')
-          .insert({ studentId, testId, value })
+          .insert({ 
+            studentid: studentId, // Use studentid (lowercase) to match DB column name
+            testid: testId,      // Use testid (lowercase) to match DB column name
+            value 
+          })
           .select()
           .single();
 
         if (error) throw error;
         
+        // Convert from DB format to our model format
+        const newGrade = {
+          ...data,
+          studentId: data.studentid,
+          testId: data.testid
+        };
+        
         set((state) => ({
-          grades: [...state.grades, data]
+          grades: [...state.grades, newGrade]
         }));
       }
       
