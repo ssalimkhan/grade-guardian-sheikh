@@ -55,7 +55,7 @@ const TestManagement: React.FC = () => {
     resolver: zodResolver(testFormSchema),
     defaultValues: {
       name: "",
-      maxGrade: 100
+      maxGrade: 1  // Changed initial value from 100 to 1
     }
   });
   
