@@ -14,7 +14,26 @@ interface GradeEntryProps {
 
 const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }) => {
   const { tests, updateGrade } = useStore();
-  const [grades, setGrades] = React.useState<Record<string, number>>(initialGrades);
+  
+  // Initialize grades with max values for tests that don't have existing grades
+  const [grades, setGrades] = React.useState<Record<string, number>>(() => {
+    const initializedGrades: Record<string, number> = {};
+    tests.forEach(test => {
+      // Use existing grade if available, otherwise use max grade as initial value
+      initializedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
+    });
+    return initializedGrades;
+  });
+  
+  // Update grades when tests or initialGrades change
+  React.useEffect(() => {
+    const updatedGrades: Record<string, number> = {};
+    tests.forEach(test => {
+      // Use existing grade if available, otherwise use max grade as initial value
+      updatedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
+    });
+    setGrades(updatedGrades);
+  }, [tests, initialGrades]);
   
   // Calculate total grades
   const totalGrade = Object.values(grades).reduce((sum, grade) => sum + grade, 0);
