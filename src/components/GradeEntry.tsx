@@ -81,20 +81,14 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
     const test = tests.find(t => t.id === testId);
     if (!test) return;
     
-    const currentGrade = grades[testId] || 0;
-    console.log('Decrementing grade for test:', testId, 'current grade:', currentGrade);
-    
+    const currentGrade = grades[testId];
     if (currentGrade > 0) {
       const newGrade = currentGrade - 1;
-      console.log('New grade will be:', newGrade);
-      
       setGrades(prev => ({
         ...prev,
         [testId]: newGrade
       }));
       updateGrade(studentId, testId, newGrade);
-    } else {
-      console.log('Cannot decrement: grade is already 0');
     }
   };
   
