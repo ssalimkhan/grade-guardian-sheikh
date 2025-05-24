@@ -25,15 +25,18 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
     return initializedGrades;
   });
   
-  // Update grades when tests or initialGrades change
+  // Update grades only when tests change or initialGrades are first set
   React.useEffect(() => {
     const updatedGrades: Record<string, number> = {};
     tests.forEach(test => {
-      // Use existing grade if available, otherwise use max value
-      updatedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
+      const currentGrade = grades[test.id];
+      // Only update if grade doesn't exist or initialGrades changed
+      if (currentGrade === undefined) {
+        updatedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
+        setGrades(prev => ({...prev, ...updatedGrades}));
+      }
     });
-    setGrades(updatedGrades);
-  }, [tests, initialGrades]);
+  }, [tests]);
   
   // Calculate total grades
   const totalGrade = Object.values(grades).reduce((sum, grade) => sum + grade, 0);
