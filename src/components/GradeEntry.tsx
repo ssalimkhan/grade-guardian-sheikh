@@ -15,12 +15,12 @@ interface GradeEntryProps {
 const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }) => {
   const { tests, updateGrade } = useStore();
   
-  // Initialize grades with actual values from initialGrades, not max values
+  // Initialize grades with max values
   const [grades, setGrades] = React.useState<Record<string, number>>(() => {
     const initializedGrades: Record<string, number> = {};
     tests.forEach(test => {
-      // Use existing grade if available, otherwise use 0 as initial value
-      initializedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : 0;
+      // Use existing grade if available, otherwise use max value
+      initializedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
     });
     return initializedGrades;
   });
@@ -29,8 +29,8 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
   React.useEffect(() => {
     const updatedGrades: Record<string, number> = {};
     tests.forEach(test => {
-      // Use existing grade if available, otherwise use 0 as initial value
-      updatedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : 0;
+      // Use existing grade if available, otherwise use max value
+      updatedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
     });
     setGrades(updatedGrades);
   }, [tests, initialGrades]);
