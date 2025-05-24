@@ -15,12 +15,12 @@ interface GradeEntryProps {
 const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }) => {
   const { tests, updateGrade } = useStore();
   
-  // Initialize grades with max values for tests that don't have existing grades
+  // Initialize grades with actual values from initialGrades, not max values
   const [grades, setGrades] = React.useState<Record<string, number>>(() => {
     const initializedGrades: Record<string, number> = {};
     tests.forEach(test => {
-      // Use existing grade if available, otherwise use max grade as initial value
-      initializedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
+      // Use existing grade if available, otherwise use 0 as initial value
+      initializedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : 0;
     });
     return initializedGrades;
   });
@@ -29,8 +29,8 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
   React.useEffect(() => {
     const updatedGrades: Record<string, number> = {};
     tests.forEach(test => {
-      // Use existing grade if available, otherwise use max grade as initial value
-      updatedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : test.maxGrade;
+      // Use existing grade if available, otherwise use 0 as initial value
+      updatedGrades[test.id] = initialGrades[test.id] !== undefined ? initialGrades[test.id] : 0;
     });
     setGrades(updatedGrades);
   }, [tests, initialGrades]);
@@ -66,7 +66,7 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
     const test = tests.find(t => t.id === testId);
     if (!test) return;
     
-    const currentGrade = grades[testId] ?? test.maxGrade;
+    const currentGrade = grades[testId] || 0;
     if (currentGrade < test.maxGrade) {
       const newGrade = currentGrade + 1;
       setGrades(prev => ({
@@ -81,7 +81,7 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
     const test = tests.find(t => t.id === testId);
     if (!test) return;
     
-    const currentGrade = grades[testId] ?? test.maxGrade;
+    const currentGrade = grades[testId] || 0;
     console.log('Decrementing grade for test:', testId, 'current grade:', currentGrade);
     
     if (currentGrade > 0) {
@@ -102,7 +102,7 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {tests.map(test => {
-          const currentGrade = grades[test.id] ?? test.maxGrade;
+          const currentGrade = grades[test.id] || 0;
           console.log('Rendering test:', test.name, 'current grade:', currentGrade, 'max grade:', test.maxGrade);
           
           return (
