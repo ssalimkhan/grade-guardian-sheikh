@@ -82,13 +82,19 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
     if (!test) return;
     
     const currentGrade = grades[testId] ?? test.maxGrade;
+    console.log('Decrementing grade for test:', testId, 'current grade:', currentGrade);
+    
     if (currentGrade > 0) {
       const newGrade = currentGrade - 1;
+      console.log('New grade will be:', newGrade);
+      
       setGrades(prev => ({
         ...prev,
         [testId]: newGrade
       }));
       updateGrade(studentId, testId, newGrade);
+    } else {
+      console.log('Cannot decrement: grade is already 0');
     }
   };
   
@@ -97,6 +103,8 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {tests.map(test => {
           const currentGrade = grades[test.id] ?? test.maxGrade;
+          console.log('Rendering test:', test.name, 'current grade:', currentGrade, 'max grade:', test.maxGrade);
+          
           return (
             <Card key={test.id}>
               <CardContent className="pt-6">
@@ -108,7 +116,10 @@ const GradeEntry: React.FC<GradeEntryProps> = ({ studentId, initialGrades = {} }
                     <Button 
                       variant="outline" 
                       size="icon" 
-                      onClick={() => decrementGrade(test.id)}
+                      onClick={() => {
+                        console.log('Decrement button clicked for test:', test.id);
+                        decrementGrade(test.id);
+                      }}
                       disabled={currentGrade <= 0}
                       className="order-last"
                     >
