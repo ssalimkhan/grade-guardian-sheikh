@@ -1,14 +1,19 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, LogOut } from "lucide-react";
 import TestManagement from "@/components/TestManagement";
 import StudentTable from "@/components/StudentTable";
 import StudentForm from "@/components/StudentForm";
 import ExportButtons from "@/components/ExportButtons";
 import { useStore } from "@/store/store";
+import { supabase } from "@/integrations/supabase/client";
+import { Session } from "@supabase/supabase-js";
 
-const Index: React.FC = () => {
+interface IndexProps {
+  session: Session;
+}
+
+const Index: React.FC<IndexProps> = ({ session }) => {
   const { fetchAllData } = useStore();
   const [studentFormOpen, setStudentFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -16,12 +21,16 @@ const Index: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
-      await fetchAllData();
+      await fetchAllData(session.user.id);
       setIsLoading(false);
     };
     
     loadData();
-  }, [fetchAllData]);
+  }, [fetchAllData, session.user.id]);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
   
   if (isLoading) {
     return (
@@ -47,21 +56,31 @@ const Index: React.FC = () => {
               <Plus className="ml-2 h-4 w-4" />
               إضافة طالب
             </Button>
+
+            <Button variant="outline" onClick={handleSignOut}>
+              <LogOut className="ml-2 h-4 w-4" />
+              تسجيل الخروج
+            </Button>
           </div>
         </div>
         
         <p className="text-gray-600">
           قم بإدارة درجات الطلاب وإضافة الاختبارات بسهولة.
         </p>
+
+        <p className="text-sm text-muted-foreground mt-2">
+          مرحباً {session.user.email}
+        </p>
       </div>
       
-      <TestManagement />
+      <TestManagement userId={session.user.id} />
       <StudentTable />
       
       {/* Add Student Dialog */}
       <StudentForm 
         open={studentFormOpen} 
         onOpenChange={setStudentFormOpen}
+        userId={session.user.id}
       />
     </div>
   );

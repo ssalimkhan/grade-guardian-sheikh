@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { Student, Test, Grade, FormattedStudent } from '../types';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,18 +11,18 @@ interface StoreState {
   error: string | null;
 
   // Fetch data
-  fetchStudents: () => Promise<void>;
-  fetchTests: () => Promise<void>;
-  fetchGrades: () => Promise<void>;
-  fetchAllData: () => Promise<void>;
+  fetchStudents: (userId: string) => Promise<void>;
+  fetchTests: (userId: string) => Promise<void>;
+  fetchGrades: (userId: string) => Promise<void>;
+  fetchAllData: (userId: string) => Promise<void>;
 
   // Student operations
-  addStudent: (name: string) => Promise<Student | null>;
+  addStudent: (name: string, userId: string) => Promise<Student | null>;
   updateStudent: (id: string, name: string) => Promise<void>;
   deleteStudent: (id: string) => Promise<void>;
 
   // Test operations
-  addTest: (name: string, maxGrade: number) => Promise<Test | null>;
+  addTest: (name: string, maxGrade: number, userId: string) => Promise<Test | null>;
   updateTest: (id: string, name: string, maxGrade: number) => Promise<void>;
   deleteTest: (id: string) => Promise<void>;
 
@@ -43,12 +42,13 @@ export const useStore = create<StoreState>((set, get) => ({
   error: null,
 
   // Fetch data
-  fetchStudents: async () => {
+  fetchStudents: async (userId: string) => {
     try {
       set({ isLoading: true });
       const { data, error } = await supabase
         .from('students')
         .select('*')
+        .eq('user_id', userId)
         .order('created_at', { ascending: true });
 
       if (error) throw error;
@@ -63,12 +63,13 @@ export const useStore = create<StoreState>((set, get) => ({
     }
   },
 
-  fetchTests: async () => {
+  fetchTests: async (userId: string) => {
     try {
       set({ isLoading: true });
       const { data, error } = await supabase
         .from('tests')
         .select('*')
+        .eq('user_id', userId)
         .order('created_at', { ascending: true });
 
       if (error) throw error;
@@ -89,12 +90,13 @@ export const useStore = create<StoreState>((set, get) => ({
     }
   },
 
-  fetchGrades: async () => {
+  fetchGrades: async (userId: string) => {
     try {
       set({ isLoading: true });
       const { data, error } = await supabase
         .from('grades')
-        .select('*');
+        .select('*, students!inner(*)')
+        .eq('students.user_id', userId);
 
       if (error) throw error;
       
@@ -115,13 +117,13 @@ export const useStore = create<StoreState>((set, get) => ({
     }
   },
 
-  fetchAllData: async () => {
+  fetchAllData: async (userId: string) => {
     try {
       set({ isLoading: true });
       await Promise.all([
-        get().fetchStudents(),
-        get().fetchTests(),
-        get().fetchGrades()
+        get().fetchStudents(userId),
+        get().fetchTests(userId),
+        get().fetchGrades(userId)
       ]);
     } catch (error) {
       console.error('Error fetching all data:', error);
@@ -133,12 +135,12 @@ export const useStore = create<StoreState>((set, get) => ({
   },
 
   // Student operations
-  addStudent: async (name: string) => {
+  addStudent: async (name: string, userId: string) => {
     try {
       set({ isLoading: true });
       const { data, error } = await supabase
         .from('students')
-        .insert({ name })
+        .insert({ name, user_id: userId })
         .select()
         .single();
 
@@ -222,12 +224,12 @@ export const useStore = create<StoreState>((set, get) => ({
   },
 
   // Test operations
-  addTest: async (name: string, maxGrade: number) => {
+  addTest: async (name: string, maxGrade: number, userId: string) => {
     try {
       set({ isLoading: true });
       const { data, error } = await supabase
         .from('tests')
-        .insert({ name, maxgrade: maxGrade }) // Use maxgrade (lowercase) to match DB column name
+        .insert({ name, maxgrade: maxGrade, user_id: userId }) // Use maxgrade (lowercase) to match DB column name
         .select()
         .single();
 
