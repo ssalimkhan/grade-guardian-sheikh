@@ -35,8 +35,8 @@ const AuthTest = () => {
           setSession(session);
         });
 
-        // Test 3: Connection test
-        const { data, error: pingError } = await supabase.from('auth.users').select('count').limit(1);
+        // Test 3: Connection test - use a simple query to students table
+        const { data, error: pingError } = await supabase.from('students').select('count').limit(1);
         if (!pingError) {
           setConnectionStatus('connected');
           console.log('AuthTest: Connection test passed');

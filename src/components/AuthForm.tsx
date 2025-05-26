@@ -43,15 +43,6 @@ const AuthForm = () => {
         });
       }
       
-      if (event === 'SIGNED_UP') {
-        console.log('AuthForm: User signed up successfully');
-        toast({
-          title: "تم إنشاء الحساب بنجاح",
-          description: "مرحباً بك! يمكنك الآن استخدام النظام",
-          duration: 3000,
-        });
-      }
-      
       if (event === 'PASSWORD_RECOVERY') {
         toast({
           title: "تم إرسال رابط استعادة كلمة المرور",

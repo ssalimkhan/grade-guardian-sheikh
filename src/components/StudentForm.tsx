@@ -36,6 +36,7 @@ type StudentFormValues = z.infer<typeof studentFormSchema>;
 interface StudentFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  userId: string;
   student?: Student;
   studentGrades?: Record<string, number>;
 }
@@ -43,6 +44,7 @@ interface StudentFormProps {
 const StudentForm: React.FC<StudentFormProps> = ({
   open,
   onOpenChange,
+  userId,
   student,
   studentGrades = {},
 }) => {
@@ -68,7 +70,7 @@ const StudentForm: React.FC<StudentFormProps> = ({
       await updateStudent(student.id, values.name);
       // Stay on the same dialog but show a success message
     } else {
-      const newStudent = await addStudent(values.name);
+      const newStudent = await addStudent(values.name, userId);
       if (newStudent) {
         setStudentId(newStudent.id);
         // Switch to grades tab if it's a new student
