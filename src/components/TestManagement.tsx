@@ -55,7 +55,7 @@ const TestManagement: React.FC = () => {
     resolver: zodResolver(testFormSchema),
     defaultValues: {
       name: "",
-      maxGrade: 1  // Changed initial value from 100 to 1
+      maxGrade: 1
     }
   });
   
@@ -63,7 +63,12 @@ const TestManagement: React.FC = () => {
     if (editingTest) {
       await updateTest(editingTest.id, values.name, values.maxGrade);
     } else {
-      await addTest(values.name, values.maxGrade);
+      // Get userId from session
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        await addTest(values.name, values.maxGrade, session.user.id);
+      }
     }
     resetAndCloseDialog();
   };
@@ -162,9 +167,9 @@ const TestManagement: React.FC = () => {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {tests.map(test => (
-          <div key={test.id} className="bg-white rounded-lg shadow p-4 border">
+          <div key={test.id} className="bg-card rounded-lg shadow p-4 border islamic-card">
             <div className="flex justify-between items-start mb-2">
-              <h3 className="font-bold text-lg">{test.name}</h3>
+              <h3 className="font-bold text-lg text-foreground">{test.name}</h3>
               <div className="flex space-x-2">
                 <Button variant="ghost" size="sm" onClick={() => handleEditTest(test)}>
                   <Edit className="h-4 w-4" />
@@ -174,13 +179,13 @@ const TestManagement: React.FC = () => {
                 </Button>
               </div>
             </div>
-            <p className="text-gray-600">الدرجة القصوى: {test.maxGrade}</p>
+            <p className="text-muted-foreground">الدرجة القصوى: {test.maxGrade}</p>
           </div>
         ))}
       </div>
       
       {tests.length === 0 && (
-        <div className="text-center py-10 text-gray-500">
+        <div className="text-center py-10 text-muted-foreground">
           لا توجد اختبارات مضافة. أضف اختبارًا جديدًا.
         </div>
       )}

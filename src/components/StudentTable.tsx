@@ -16,6 +16,7 @@ import { Edit, Trash2 } from "lucide-react";
 import { Student, Test } from "@/types";
 import { useStore } from "@/store/store";
 import StudentForm from "./StudentForm";
+import { supabase } from "@/integrations/supabase/client";
 
 const StudentTable: React.FC = () => {
   const { students, tests, grades, deleteStudent, getFormattedStudents } = useStore();
@@ -24,7 +25,18 @@ const StudentTable: React.FC = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [studentToEdit, setStudentToEdit] = useState<Student | null>(null);
   const [studentGrades, setStudentGrades] = useState<Record<string, number>>({});
+  const [userId, setUserId] = useState<string>("");
   
+  // Get current user ID
+  React.useEffect(() => {
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserId(session.user.id);
+      }
+    };
+    getUser();
+  }, []);
   const formattedStudents = getFormattedStudents();
   
   const handleEditClick = (student: Student) => {
@@ -140,6 +152,7 @@ const StudentTable: React.FC = () => {
       <StudentForm
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
+        userId={userId}
         student={studentToEdit || undefined}
         studentGrades={studentGrades}
       />

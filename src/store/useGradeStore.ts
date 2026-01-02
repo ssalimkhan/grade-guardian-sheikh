@@ -51,17 +51,17 @@ export const useGradeStore = create<GradeStoreState & GradeStoreActions>((set, g
   fetchStudents: async (userId: string) => {
     try {
       set({ isLoading: true });
-      const { data, error } = await supabase
+      const result = await (supabase
         .from('students')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true }) as any);
 
-      if (error) throw error;
+      if (result.error) throw result.error;
       
-      set({ students: data || [] });
-    } catch (error) {
-      console.error('Error fetching students:', error);
+      set({ students: result.data || [] });
+    } catch (err) {
+      console.error('Error fetching students:', err);
       set({ error: 'حدث خطأ أثناء تحميل بيانات الطلاب' });
       toast.error('حدث خطأ أثناء تحميل بيانات الطلاب');
     } finally {
@@ -72,23 +72,23 @@ export const useGradeStore = create<GradeStoreState & GradeStoreActions>((set, g
   fetchTests: async (userId: string) => {
     try {
       set({ isLoading: true });
-      const { data, error } = await supabase
+      const result = await (supabase
         .from('tests')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true }) as any);
 
-      if (error) throw error;
+      if (result.error) throw result.error;
       
       // Map database fields to our model
-      const mappedData = (data || []).map(item => ({
+      const mappedData = (result.data || []).map((item: any) => ({
         ...item,
         maxGrade: item.maxgrade // Map maxgrade -> maxGrade
       }));
       
       set({ tests: mappedData });
-    } catch (error) {
-      console.error('Error fetching tests:', error);
+    } catch (err) {
+      console.error('Error fetching tests:', err);
       set({ error: 'حدث خطأ أثناء تحميل بيانات الاختبارات' });
       toast.error('حدث خطأ أثناء تحميل بيانات الاختبارات');
     } finally {
