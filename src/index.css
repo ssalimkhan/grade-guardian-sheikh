@@ -136,6 +136,15 @@
     font-family: 'Scheherazade New', 'Amiri', serif;
     font-weight: 700;
   }
+
+  /* Font utility class */
+  .font-scheherazade {
+    font-family: 'Scheherazade New', 'Amiri', serif;
+  }
+
+  .font-amiri {
+    font-family: 'Amiri', serif;
+  }
 }
 
 /* Custom utility classes for RTL */

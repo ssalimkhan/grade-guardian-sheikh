@@ -101,35 +101,40 @@ const AuthForm = () => {
   // Show loading spinner while checking session
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4 islamic-pattern">
         <div className="text-center space-y-4">
-          <Loader2 className="h-12 w-12 mx-auto animate-spin text-indigo-600" />
-          <p className="text-lg font-medium text-gray-700">جاري التحقق من الجلسة...</p>
+          <Loader2 className="h-12 w-12 mx-auto animate-spin text-primary" />
+          <p className="text-lg font-medium text-foreground">جاري التحقق من الجلسة...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6 lg:p-8 islamic-pattern">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-center">
-            <h1 className="text-2xl font-bold text-white">Grade Guardian</h1>
-            <p className="text-blue-100 mt-1">إدارة درجات الطلاب بكل سهولة</p>
+        <div className="islamic-card rounded-2xl shadow-xl overflow-hidden">
+          {/* Decorative Header */}
+          <div className="bg-gradient-to-r from-emerald to-emerald-light p-6 text-center relative overflow-hidden">
+            <div className="absolute inset-0 opacity-20 islamic-pattern"></div>
+            <h1 className="text-2xl font-bold text-primary-foreground relative z-10 font-scheherazade">حارس الدرجات</h1>
+            <p className="text-primary-foreground/80 mt-1 relative z-10">إدارة درجات الطلاب بكل سهولة</p>
           </div>
           
-          <div className="p-6 sm:p-8">
+          {/* Gold decorative line */}
+          <div className="gold-line"></div>
+          
+          <div className="p-6 sm:p-8 bg-card">
             <div className="mb-8 text-center">
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-2xl font-bold text-foreground font-scheherazade">
                 {window.location.pathname.includes('sign-up') ? 'إنشاء حساب جديد' : 'مرحباً بعودتك'}
               </h2>
-              <p className="text-gray-500 mt-1">
+              <p className="text-muted-foreground mt-1">
                 {window.location.pathname.includes('sign-up') 
                   ? 'املأ البيانات لإنشاء حساب جديد' 
                   : 'سجل دخولك للمتابعة'}
@@ -137,9 +142,9 @@ const AuthForm = () => {
             </div>
             
             {authLoading && (
-              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center space-x-3 space-x-reverse">
-                <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
-                <span className="text-blue-700">جاري المعالجة...</span>
+              <div className="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-lg flex items-center space-x-3 space-x-reverse">
+                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                <span className="text-primary">جاري المعالجة...</span>
               </div>
             )}
             
@@ -151,9 +156,13 @@ const AuthForm = () => {
                   variables: {
                     default: {
                       colors: {
-                        brand: '#4f46e5',
-                        brandAccent: '#4338ca',
+                        brand: 'hsl(158, 64%, 32%)',
+                        brandAccent: 'hsl(158, 50%, 45%)',
                         brandButtonText: 'white',
+                        inputBackground: 'hsl(39, 40%, 98%)',
+                        inputBorder: 'hsl(35, 25%, 85%)',
+                        inputBorderFocus: 'hsl(158, 64%, 32%)',
+                        inputBorderHover: 'hsl(45, 90%, 48%)',
                       },
                       space: {
                         spaceSmall: '0.5rem',
@@ -163,13 +172,17 @@ const AuthForm = () => {
                       fontSizes: {
                         baseBodySize: '0.95rem',
                       },
+                      fonts: {
+                        bodyFontFamily: 'Amiri, serif',
+                        inputFontFamily: 'Amiri, serif',
+                      },
                     },
                   },
                   className: {
-                    button: 'w-full flex justify-center transition-all duration-200',
-                    input: 'rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 transition-all duration-200',
-                    label: 'text-sm font-medium text-gray-700',
-                    anchor: 'text-indigo-600 hover:text-indigo-500 text-sm transition-colors duration-200',
+                    button: 'w-full flex justify-center transition-all duration-200 btn-glow',
+                    input: 'rounded-lg border-border focus:border-primary focus:ring-primary transition-all duration-200 bg-input',
+                    label: 'text-sm font-medium text-foreground',
+                    anchor: 'text-primary hover:text-emerald-light text-sm transition-colors duration-200',
                     message: 'text-sm',
                   },
                 }}
@@ -212,20 +225,20 @@ const AuthForm = () => {
               
               <div className="relative mt-6">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200" />
+                  <div className="w-full gold-line" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-2 text-gray-500">أو</span>
+                  <span className="bg-card px-4 text-muted-foreground">أو</span>
                 </div>
               </div>
               
               <div className="mt-6">
-                <p className="text-center text-sm text-gray-600">
+                <p className="text-center text-sm text-muted-foreground">
                   {window.location.pathname.includes('sign-up') ? (
                     <>لديك حساب بالفعل؟{' '}
                       <a 
                         href="/login" 
-                        className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200"
+                        className="font-medium text-primary hover:text-emerald-light transition-colors duration-200"
                         onClick={(e) => {
                           e.preventDefault();
                           navigate('/login');
@@ -238,7 +251,7 @@ const AuthForm = () => {
                     <>ليس لديك حساب؟{' '}
                       <a 
                         href="/signup" 
-                        className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200"
+                        className="font-medium text-primary hover:text-emerald-light transition-colors duration-200"
                         onClick={(e) => {
                           e.preventDefault();
                           navigate('/signup');
@@ -254,8 +267,10 @@ const AuthForm = () => {
           </div>
         </div>
         
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} Grade Guardian. جميع الحقوق محفوظة.</p>
+        {/* Footer with decorative elements */}
+        <div className="mt-6 text-center">
+          <div className="gold-line mb-4 w-1/2 mx-auto"></div>
+          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} حارس الدرجات. جميع الحقوق محفوظة.</p>
         </div>
       </motion.div>
     </div>
