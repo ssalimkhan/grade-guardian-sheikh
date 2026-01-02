@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,65 +7,99 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Islamic Theme - Light Mode */
+    /* Warm cream/ivory background inspired by old manuscripts */
+    --background: 39 45% 96%;
+    --foreground: 25 30% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Cards with subtle warmth */
+    --card: 39 40% 98%;
+    --card-foreground: 25 30% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 39 40% 98%;
+    --popover-foreground: 25 30% 15%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    /* Rich emerald green - primary Islamic color */
+    --primary: 158 64% 32%;
+    --primary-foreground: 39 45% 96%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Warm sand/beige secondary */
+    --secondary: 35 30% 90%;
+    --secondary-foreground: 25 30% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted warm tones */
+    --muted: 35 25% 92%;
+    --muted-foreground: 25 15% 45%;
 
-    --accent: 172 66% 50%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Royal gold accent */
+    --accent: 45 90% 48%;
+    --accent-foreground: 25 30% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Deep burgundy for destructive */
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 39 45% 96%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    /* Warm borders */
+    --border: 35 25% 85%;
+    --input: 35 25% 88%;
+    --ring: 158 64% 32%;
 
     --radius: 0.5rem;
+
+    /* Custom Islamic decorative colors */
+    --gold: 45 90% 48%;
+    --gold-light: 45 85% 70%;
+    --emerald: 158 64% 32%;
+    --emerald-light: 158 50% 45%;
+    --burgundy: 0 50% 35%;
+    --turquoise: 175 55% 45%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Islamic Theme - Dark Mode */
+    /* Deep midnight blue background */
+    --background: 220 35% 10%;
+    --foreground: 39 30% 92%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    /* Rich dark cards */
+    --card: 220 30% 14%;
+    --card-foreground: 39 30% 92%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 30% 14%;
+    --popover-foreground: 39 30% 92%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Luminous emerald green */
+    --primary: 158 55% 45%;
+    --primary-foreground: 220 35% 10%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    /* Dark warm secondary */
+    --secondary: 220 25% 20%;
+    --secondary-foreground: 39 30% 90%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Muted dark tones */
+    --muted: 220 25% 18%;
+    --muted-foreground: 39 20% 60%;
 
-    --accent: 172 66% 50%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Glowing gold accent */
+    --accent: 45 85% 55%;
+    --accent-foreground: 220 35% 10%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    /* Deep crimson destructive */
+    --destructive: 0 55% 40%;
+    --destructive-foreground: 39 30% 92%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* Dark borders with warmth */
+    --border: 220 25% 22%;
+    --input: 220 25% 20%;
+    --ring: 45 85% 55%;
+
+    /* Custom Islamic decorative colors - dark mode */
+    --gold: 45 85% 55%;
+    --gold-light: 45 80% 65%;
+    --emerald: 158 55% 45%;
+    --emerald-light: 158 45% 55%;
+    --burgundy: 0 45% 45%;
+    --turquoise: 175 50% 50%;
   }
 }
 
@@ -81,6 +115,11 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Amiri', serif;
+    background-image: 
+      radial-gradient(circle at 20% 50%, hsl(var(--gold) / 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--emerald) / 0.03) 0%, transparent 40%),
+      radial-gradient(circle at 40% 80%, hsl(var(--turquoise) / 0.02) 0%, transparent 40%);
+    min-height: 100vh;
   }
 
   /* RTL overrides for ShadCN components */
@@ -91,6 +130,12 @@
   .dropdown-menu {
     @apply right-0 left-auto;
   }
+
+  /* Islamic decorative heading styles */
+  h1, h2, h3 {
+    font-family: 'Scheherazade New', 'Amiri', serif;
+    font-weight: 700;
+  }
 }
 
 /* Custom utility classes for RTL */
@@ -98,21 +143,63 @@
   transform: scaleX(-1);
 }
 
-/* Custom styled scrollbar */
+/* Islamic geometric pattern overlay */
+.islamic-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.08'%3E%3Cpath d='M30 30L15 15L30 0L45 15L30 30zM30 30L15 45L30 60L45 45L30 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Gold accent line */
+.gold-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, hsl(var(--gold)), transparent);
+}
+
+/* Decorative card with Islamic flair */
+.islamic-card {
+  position: relative;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  box-shadow: 
+    0 4px 20px -4px hsl(var(--gold) / 0.1),
+    inset 0 1px 0 hsl(var(--gold) / 0.1);
+}
+
+.islamic-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, hsl(var(--emerald)), hsl(var(--gold)), hsl(var(--emerald)));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* Custom styled scrollbar with Islamic theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #f3f4f6;
+  background-color: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
+  background: linear-gradient(180deg, hsl(var(--emerald)), hsl(var(--emerald-light)));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #9ca3af;
+  background: linear-gradient(180deg, hsl(var(--gold)), hsl(var(--gold-light)));
+}
+
+/* Button glow effect */
+.btn-glow {
+  box-shadow: 0 0 20px hsl(var(--gold) / 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.btn-glow:hover {
+  box-shadow: 0 0 30px hsl(var(--gold) / 0.5);
 }

@@ -62,7 +62,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Islamic theme custom colors
+				gold: {
+					DEFAULT: 'hsl(var(--gold))',
+					light: 'hsl(var(--gold-light))'
+				},
+				emerald: {
+					DEFAULT: 'hsl(var(--emerald))',
+					light: 'hsl(var(--emerald-light))'
+				},
+				burgundy: 'hsl(var(--burgundy))',
+				turquoise: 'hsl(var(--turquoise))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
