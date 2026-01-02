@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { Student, Test, Grade, FormattedStudent } from "../types";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { fetchFromTable, fetchByIds, insertRow, updateRow, deleteRow, upsertGrade } from "@/lib/supabase-helpers";
 
 // Define state type
 type State = {
@@ -49,16 +50,11 @@ export const useStore = create<State & Actions>((set, get) => ({
   fetchStudents: async (userId: string) => {
     try {
       set({ isLoading: true });
-      const result = await (supabase
-        .from("students")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: true }) as any);
+      const result = await fetchFromTable("students", userId);
 
       if (result.error) throw result.error;
 
       set({ students: result.data || [] });
-
     } catch (err) {
       console.error("Error fetching students:", err);
       set({ error: "حدث خطأ أثناء تحميل بيانات الطلاب" });
@@ -71,11 +67,7 @@ export const useStore = create<State & Actions>((set, get) => ({
   fetchTests: async (userId: string) => {
     try {
       set({ isLoading: true });
-      const result = await (supabase
-        .from("tests")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: true }) as any);
+      const result = await fetchFromTable("tests", userId);
 
       if (result.error) throw result.error;
 
@@ -100,29 +92,23 @@ export const useStore = create<State & Actions>((set, get) => ({
       set({ isLoading: true });
 
       // First, get all students for this user
-      const { data: studentsData, error: studentsError } = await supabase
-        .from("students")
-        .select("id")
-        .eq("user_id", userId);
+      const studentsResult = await fetchFromTable("students", userId);
 
-      if (studentsError) throw studentsError;
+      if (studentsResult.error) throw studentsResult.error;
 
-      if (!studentsData || studentsData.length === 0) {
+      if (!studentsResult.data || studentsResult.data.length === 0) {
         set({ grades: [] });
         return;
       }
 
       // Get all grades for these students
-      const studentIds = studentsData.map((s) => s.id);
-      const { data: gradesData, error: gradesError } = await supabase
-        .from("grades")
-        .select("*")
-        .in("studentid", studentIds);
+      const studentIds = studentsResult.data.map((s: any) => s.id);
+      const gradesResult = await fetchByIds("grades", "studentid", studentIds);
 
-      if (gradesError) throw gradesError;
+      if (gradesResult.error) throw gradesResult.error;
 
       // Map database fields to our model
-      const mappedData = (gradesData || []).map((item) => ({
+      const mappedData = (gradesResult.data || []).map((item: any) => ({
         ...item,
         studentId: item.studentid, // Map studentid -> studentId
         testId: item.testid, // Map testid -> testId
