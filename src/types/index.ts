@@ -32,3 +32,19 @@ export interface FormattedStudent {
   total: number;
   maxPossible: number;
 }
+
+// Grade template types
+export interface TestConfig {
+  name: string;
+  maxGrade: number;
+}
+
+export interface GradeTemplate {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  test_configs: TestConfig[];
+  created_at?: string;
+  updated_at?: string;
+}
